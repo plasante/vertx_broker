@@ -18,6 +18,7 @@ import java.util.Map;
 public class MainVerticle extends MainVerticleAbstract {
 
   private static final Logger LOG = LogManager.getLogger(MainVerticle.class);
+  public static final int PORT = 8888;
 
   public static void main(String[] args) {
     Vertx vertx = Vertx.vertx();
@@ -58,10 +59,10 @@ public class MainVerticle extends MainVerticleAbstract {
     vertx.createHttpServer()
       .requestHandler(restApi)
       .exceptionHandler(error -> LOG.error("HTTP Server error: {}", error))
-      .listen(8888, http -> {
+      .listen(PORT, http -> {
         if (http.succeeded()) {
           startPromise.complete();
-          LOG.info("Vert.x server started on port 8888");
+          LOG.info("Vert.x server started on port {}", PORT);
         } else {
           startPromise.fail(http.cause());
         }

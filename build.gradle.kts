@@ -37,6 +37,7 @@ dependencies {
   implementation("org.apache.logging.log4j:log4j-core:2.17.1")
   implementation("org.apache.logging.log4j:log4j-slf4j18-impl:2.17.1")
   implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
+  implementation("io.vertx:vertx-web-client")
 }
 
 java {
