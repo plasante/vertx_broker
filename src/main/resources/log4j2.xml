@@ -5,8 +5,25 @@
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </Console>
   </Appenders>
+
   <Loggers>
-    <Root level="INFO">
+    <Logger name="com.uniksoft.httpHandlers.PostHandler" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger name="com.uniksoft.httpHandlers.DeleteHandler" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger name="com.uniksoft.httpHandlers.PutHandler" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger name="com.uniksoft.httpHandlers.GetHandler" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger name="com.uniksoft.MainVerticle" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+
+    <Root level="error">
       <AppenderRef ref="Console"/>
     </Root>
   </Loggers>
