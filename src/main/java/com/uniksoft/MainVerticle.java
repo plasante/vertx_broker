@@ -6,6 +6,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.logging.log4j.LogManager;
@@ -35,6 +36,11 @@ public class MainVerticle extends MainVerticleAbstract {
   @Override
   public void start(Promise<Void> startPromise) {
     Router restApi = Router.router(vertx);
+    // register a failure on all routes
+    restApi.route().failureHandler(errorContext -> {
+      handleRouteFailure(errorContext);
+    });
+
     restApi.route("/favicon.ico").handler(this::handleFavicon);
 
 
@@ -59,6 +65,19 @@ public class MainVerticle extends MainVerticleAbstract {
         }
       });
   }
+
+  private static void handleRouteFailure(RoutingContext errorContext) {
+    if (errorContext.response().ended()) {
+      // We ignore completed response
+      return;
+    } else {
+      LOG.error("Route Error: {}", errorContext.failure());
+      errorContext.response()
+        .setStatusCode(500)
+        .end(new JsonObject().put("message", "Something went wrong").encodePrettily());
+    }
+  }
+
   private void handleFavicon(RoutingContext routingContext) {
     //LOG.info("Favicon requested");
 
