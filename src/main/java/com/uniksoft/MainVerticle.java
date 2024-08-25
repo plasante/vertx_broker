@@ -36,6 +36,7 @@ public class MainVerticle extends MainVerticleAbstract {
   @Override
   public void start(Promise<Void> startPromise) {
     Router restApi = Router.router(vertx);
+
     // register a failure on all routes
     restApi.route().failureHandler(errorContext -> {
       handleRouteFailure(errorContext);
@@ -49,8 +50,9 @@ public class MainVerticle extends MainVerticleAbstract {
     restApi.route().handler(routingContext -> {
       HttpServerRequest request = routingContext.request();
       String path = request.path();
-      RequestMethodHandler handler = strategies.get(request.method());
-        handler.handle(routingContext, path);
+      // handlerStrategy will depend on GET PUT POST DELETE
+      RequestMethodHandler handlerStrategy = strategies.get(request.method());
+      handlerStrategy.handle(routingContext, path);
     });
 
     vertx.createHttpServer()
