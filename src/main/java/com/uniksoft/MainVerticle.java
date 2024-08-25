@@ -34,26 +34,30 @@ public class MainVerticle extends MainVerticleAbstract {
 
   @Override
   public void start(Promise<Void> startPromise) {
-    Router router = Router.router(vertx);
-    router.route("/favicon.ico").handler(this::handleFavicon);
+    Router restApi = Router.router(vertx);
+    restApi.route("/favicon.ico").handler(this::handleFavicon);
 
 
     Map<HttpMethod, RequestMethodHandler> strategies = getHttpMethodRequestMethodHandlerMap();
 
-    router.route().handler(routingContext -> {
+    restApi.route().handler(routingContext -> {
       HttpServerRequest request = routingContext.request();
+      String path = request.path();
       RequestMethodHandler handler = strategies.get(request.method());
-        handler.handle(routingContext);
+        handler.handle(routingContext, path);
     });
 
-    vertx.createHttpServer().requestHandler(router).listen(8888).onComplete(http -> {
-      if (http.succeeded()) {
-        startPromise.complete();
-        LOG.info("Vert.x server started on port 8889");
-      } else {
-        startPromise.fail(http.cause());
-      }
-    });
+    vertx.createHttpServer()
+      .requestHandler(restApi)
+      .exceptionHandler(error -> LOG.error("HTTP Server error: {}", error))
+      .listen(8888, http -> {
+        if (http.succeeded()) {
+          startPromise.complete();
+          LOG.info("Vert.x server started on port 8888");
+        } else {
+          startPromise.fail(http.cause());
+        }
+      });
   }
   private void handleFavicon(RoutingContext routingContext) {
     //LOG.info("Favicon requested");

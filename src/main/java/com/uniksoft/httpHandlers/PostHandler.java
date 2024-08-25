@@ -8,7 +8,7 @@ public class PostHandler implements RequestMethodHandler {
   private static final Logger LOG = LogManager.getLogger(PostHandler.class);
 
   @Override
-  public void handle(RoutingContext context) {
+  public void handle(RoutingContext context, String path) {
     LOG.info("Post handler called");
     context.response().end("POST Hello World");
   }

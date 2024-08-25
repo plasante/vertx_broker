@@ -8,7 +8,7 @@ public class DeleteHandler implements RequestMethodHandler {
   private static final Logger LOG = LogManager.getLogger(DeleteHandler.class);
 
   @Override
-  public void handle(RoutingContext context) {
+  public void handle(RoutingContext context, String path) {
     LOG.info("Delete handler called");
     context.response().end("DELETE Hello World");
   }

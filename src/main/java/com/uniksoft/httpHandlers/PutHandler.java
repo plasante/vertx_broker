@@ -8,7 +8,7 @@ public class PutHandler implements RequestMethodHandler {
   private static final Logger LOG = LogManager.getLogger(PutHandler.class);
 
   @Override
-  public void handle(RoutingContext context) {
+  public void handle(RoutingContext context, String path) {
     LOG.info("Put handler called");
     context.response().end("PUT Hello World");
   }
