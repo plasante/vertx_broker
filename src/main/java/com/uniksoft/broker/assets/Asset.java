@@ -1,10 +1,16 @@
 package com.uniksoft.broker.assets;
 
-public class Asset {
-  private final String name;
+import lombok.Builder;
 
-  public Asset(final String name) {
+@Builder
+public class Asset {
+  private String name;
+
+  public Asset(String name) {
     this.name = name;
+  }
+
+  public Asset() {
   }
 
   public String getName() {

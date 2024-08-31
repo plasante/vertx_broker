@@ -5,6 +5,8 @@ plugins {
   java
   application
   id("com.github.johnrengelman.shadow") version "7.1.2"
+  //kotlin("jvm") version "1.9.0" // add this line to specify the kotlin version
+  //kotlin("kapt") version "1.9.0" // now kapt should be recognised
 }
 
 group = "com.uniksoft"
@@ -38,6 +40,10 @@ dependencies {
   implementation("org.apache.logging.log4j:log4j-slf4j18-impl:2.17.1")
   implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
   implementation("io.vertx:vertx-web-client")
+  "compileOnly"("org.projectlombok:lombok:1.18.22")
+  "annotationProcessor"("org.projectlombok:lombok:1.18.22")
+  "testCompileOnly"("org.projectlombok:lombok:1.18.22")
+  "testAnnotationProcessor"("org.projectlombok:lombok:1.18.22")
 }
 
 java {

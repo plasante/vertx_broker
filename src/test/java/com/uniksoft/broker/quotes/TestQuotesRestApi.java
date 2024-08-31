@@ -1,4 +1,4 @@
-package com.uniksoft.broker.assets;
+package com.uniksoft.broker.quotes;
 
 import com.uniksoft.MainVerticle;
 import io.vertx.core.Vertx;
@@ -15,9 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(VertxExtension.class)
-public class TestAssetsRestApi {
-
-  private final Logger LOG = LogManager.getLogger(TestAssetsRestApi.class);
+public class TestQuotesRestApi {
+  private final Logger LOG = LogManager.getLogger(TestQuotesRestApi.class);
 
   @BeforeEach
   void deploy_verticle(Vertx vertx, VertxTestContext testContext) {
@@ -25,7 +24,7 @@ public class TestAssetsRestApi {
   }
 
   @Test
-  void return_all_assets(Vertx vertx, VertxTestContext testContext) throws Throwable {
+  void return_quote_for_asset(Vertx vertx, VertxTestContext testContext) throws Throwable {
     // Create an asynchronous WebClient
     // The default port is the port of our server
     var client = WebClient.create(vertx,
@@ -36,13 +35,13 @@ public class TestAssetsRestApi {
     // notified of the outcome of the test
     // testContext.completeNow() est necessaire pour garantir que le test
     // se termine correctement.
-    client.get("/assets")
+    client.get("/quotes/AMZN")
       .send()
       .onComplete(testContext.succeeding(response -> {
-        var json = response.bodyAsJsonArray();
+        var json = response.bodyAsJsonObject();
         LOG.info("Response: {}", json);
-        var expectedEncode = "[{\"name\":\"GOOG\"},{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"NFLX\"},{\"name\":\"TSLA\"}]";
-        assertEquals(expectedEncode, json.encode());
+        var expectedEncode = "{name=AMZN}";
+        assertEquals(expectedEncode, json.getString("asset"));
         assertEquals(200, response.statusCode());
         testContext.completeNow();
       }));

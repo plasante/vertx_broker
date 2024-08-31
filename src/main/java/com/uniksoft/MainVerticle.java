@@ -1,5 +1,6 @@
 package com.uniksoft;
 
+import com.uniksoft.broker.quotes.QuotesRestApi;
 import com.uniksoft.httpHandlers.*;
 import io.vertx.core.Promise;
 
@@ -48,6 +49,8 @@ public class MainVerticle extends MainVerticleAbstract {
 
     Map<HttpMethod, RequestMethodHandler> strategies = getHttpMethodRequestMethodHandlerMap();
 
+    QuotesRestApi.attach(restApi);
+
     restApi.route().handler(routingContext -> {
       HttpServerRequest request = routingContext.request();
       String path = request.path();
@@ -55,6 +58,7 @@ public class MainVerticle extends MainVerticleAbstract {
       RequestMethodHandler handlerStrategy = strategies.get(request.method());
       handlerStrategy.handle(routingContext, path);
     });
+
 
     vertx.createHttpServer()
       .requestHandler(restApi)
