@@ -41,7 +41,7 @@ public class TestAssetsRestApi {
       .onComplete(testContext.succeeding(response -> {
         var json = response.bodyAsJsonArray();
         LOG.info("Response: {}", json);
-        var expectedEncode = "[{\"name\":\"GOOG\"},{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"NFLX\"},{\"name\":\"TSLA\"}]";
+        var expectedEncode = "[{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"FB\"},{\"name\":\"GOOG\"},{\"name\":\"MSFT\"},{\"name\":\"TSLA\"}]";
         assertEquals(expectedEncode, json.encode());
         assertEquals(200, response.statusCode());
         testContext.completeNow();

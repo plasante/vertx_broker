@@ -2,6 +2,7 @@ package com.uniksoft.broker.quotes;
 
 import com.uniksoft.broker.assets.Asset;
 import com.uniksoft.broker.assets.AssetsRestApi;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import org.apache.logging.log4j.LogManager;
@@ -10,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class QuotesRestApi {
   private static final Logger LOG = LogManager.getLogger(QuotesRestApi.class);
@@ -28,11 +30,22 @@ public class QuotesRestApi {
       LOG.info("Received request for asset: {}", assetParam);
 
       // We return a fictitious asset
-      var quote = cachedQuotes.get(assetParam);
+      // It is possible that assetParam (i.e. AMZN) is not found
+      var maybeQuote = Optional.ofNullable(cachedQuotes.get(assetParam));
+      if (maybeQuote.isEmpty()) {
+        routingContext.response()
+          .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
+          .end(new JsonObject()
+            .put("message", "quote for asset " + assetParam + " not available!")
+            .put("path", routingContext.normalizedPath())
+            .toBuffer()
+          );
+        return;
+      }
 
-      final JsonObject response = quote.toJsonObject();
+      final JsonObject response = maybeQuote.get().toJsonObject();
       LOG.info("Path {} responds with {}", routingContext.normalisedPath(), response.encodePrettily());
-      routingContext.response().end(quote.toJsonObject().toBuffer());
+      routingContext.response().end(response.toBuffer());
     });
   }
 
