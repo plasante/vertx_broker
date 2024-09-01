@@ -35,7 +35,7 @@ public class WatchListRestApi {
       var watchList = watchListPerAccount.get(UUID.fromString(accountId));
       Optional.ofNullable(watchList)
         .ifPresentOrElse(
-          wl -> context.response().end(wl.toJsonObject().toBuffer()),
+          accountWatchList -> context.response().end(accountWatchList.toJsonObject().encode()),
           () -> context.response()
             .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
             .end(new JsonObject()
