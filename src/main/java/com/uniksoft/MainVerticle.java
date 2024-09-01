@@ -2,6 +2,7 @@ package com.uniksoft;
 
 import com.uniksoft.broker.assets.AssetsRestApi;
 import com.uniksoft.broker.quotes.QuotesRestApi;
+import com.uniksoft.broker.watchlist.WatchListRestApi;
 import com.uniksoft.httpHandlers.*;
 import io.vertx.core.Promise;
 
@@ -50,8 +51,10 @@ public class MainVerticle extends MainVerticleAbstract {
 
     Map<HttpMethod, RequestMethodHandler> strategies = getHttpMethodRequestMethodHandlerMap();
 
+    // Defining end points
     AssetsRestApi.attach(restApi);
     QuotesRestApi.attach(restApi);
+    WatchListRestApi.attach(restApi);
 
 //    restApi.route().handler(routingContext -> {
 //      HttpServerRequest request = routingContext.request();
