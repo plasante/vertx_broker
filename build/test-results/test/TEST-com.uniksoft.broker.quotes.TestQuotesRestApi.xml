@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.uniksoft.broker.quotes.TestQuotesRestApi" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-09-01T11:43:14" hostname="DESKTOP-JQE2U8N" time="0.1">
+  <properties/>
+  <testcase name="return_not_found_for_unknown_asset(Vertx, VertxTestContext)" classname="com.uniksoft.broker.quotes.TestQuotesRestApi" time="0.042"/>
+  <testcase name="return_quote_for_asset(Vertx, VertxTestContext)" classname="com.uniksoft.broker.quotes.TestQuotesRestApi" time="0.057"/>
+  <system-out><![CDATA[07:43:14.148 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+07:43:14.191 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
