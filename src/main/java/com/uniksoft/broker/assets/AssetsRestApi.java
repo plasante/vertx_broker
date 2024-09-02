@@ -28,6 +28,7 @@ public class AssetsRestApi {
         LOG.info("Path {} responds with {}", context.normalizedPath(), response.encode());
       context.response()
         .putHeader(HttpHeaderNames.CONTENT_TYPE.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
+        .putHeader("my-header", "my-header-value")
         .end(response.encode());
     });
   }
