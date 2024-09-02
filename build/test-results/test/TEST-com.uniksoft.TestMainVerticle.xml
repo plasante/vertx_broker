@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.uniksoft.TestMainVerticle" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-09-02T15:21:17" hostname="DESKTOP-JQE2U8N" time="0.556">
+  <properties/>
+  <testcase name="verticle_deployed(Vertx, VertxTestContext)" classname="com.uniksoft.TestMainVerticle" time="0.556"/>
+  <system-out><![CDATA[11:21:17.517 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
