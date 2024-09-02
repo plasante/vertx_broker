@@ -2,6 +2,7 @@ package com.uniksoft.broker.watchlist;
 
 import com.uniksoft.MainVerticle;
 import com.uniksoft.broker.assets.Asset;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
@@ -37,12 +38,24 @@ public class TestWatchListRestApi {
       .sendJsonObject(getBody())
       .onComplete(testContext.succeeding(response -> {
         var json = response.bodyAsJsonObject();
-        LOG.info("Response: {}", json);
+        LOG.info("Response PUT: {}", json);
         var expectedEncode = "{\"assets\":[{\"name\":\"AMZN\"},{\"name\":\"TLSA\"}]}";
         assertEquals(expectedEncode, json.encode());
         assertEquals(200, response.statusCode());
-        testContext.completeNow();
-      }));
+      }))
+      .compose(next -> {
+        client.get("/account/watchlist/" + accountId.toString())
+          .send()
+          .onComplete(testContext.succeeding(response -> {
+            var json = response.bodyAsJsonObject();
+            LOG.info("Response GET: {}", json);
+            var expectedEncode = "{\"assets\":[{\"name\":\"AMZN\"},{\"name\":\"TLSA\"}]}";
+            assertEquals(expectedEncode, json.encode());
+            assertEquals(200, response.statusCode());
+            testContext.completeNow();
+          }));
+        return Future.succeededFuture();
+      });
   }
 
   private static JsonObject getBody() {
