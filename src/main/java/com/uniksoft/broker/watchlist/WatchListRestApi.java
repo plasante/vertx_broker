@@ -3,6 +3,7 @@ package com.uniksoft.broker.watchlist;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,17 +22,17 @@ public class WatchListRestApi {
     String path = "/account/watchlist/:accountId";
     getWatchList(parent, path, watchListPerAccount);
     putWatchList(parent, path, watchListPerAccount);
+    deleteWatchList(parent, path, watchListPerAccount);
 
-    parent.delete(path).handler(context -> {
+  }
 
-    });
+  private static void deleteWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
+
   }
 
   private static void putWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
     parent.put(path).handler(context -> {
-      var accountId = context.pathParam("accountId");
-      LOG.debug("{} for account {}", context.normalizedPath(), accountId);
-
+      var accountId = getAccountId(context);
       var json = context.getBodyAsJson();
       var watchList = json.mapTo(WatchList.class);
       //Todo: This could fail if UUID is invalid or the body of the request
@@ -44,8 +45,7 @@ public class WatchListRestApi {
 
   private static void getWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
     parent.get(path).handler(context -> {
-      var accountId = context.pathParam("accountId");
-      LOG.debug("{} for account {}", context.normalizedPath(), accountId);
+      var accountId = getAccountId(context);
       var watchList = watchListPerAccount.get(UUID.fromString(accountId));
       Optional.ofNullable(watchList)
         .ifPresentOrElse(
@@ -58,5 +58,11 @@ public class WatchListRestApi {
               .toBuffer()
             ));
     });
+  }
+
+  private static String getAccountId(RoutingContext context) {
+    var accountId = context.pathParam("accountId");
+    LOG.debug("{} for account {}", context.normalizedPath(), accountId);
+    return accountId;
   }
 }

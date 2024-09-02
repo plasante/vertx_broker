@@ -34,13 +34,13 @@ public class TestWatchListRestApi {
     var client = WebClient.create(vertx,
       new WebClientOptions().setDefaultPort(MainVerticle.PORT));
     var accountId = UUID.randomUUID();
+    var expectedBodyResponse = "{\"assets\":[{\"name\":\"AMZN\"},{\"name\":\"TLSA\"}]}";
     client.put("/account/watchlist/" + accountId.toString())
       .sendJsonObject(getBody())
       .onComplete(testContext.succeeding(response -> {
         var json = response.bodyAsJsonObject();
         LOG.info("Response PUT: {}", json);
-        var expectedEncode = "{\"assets\":[{\"name\":\"AMZN\"},{\"name\":\"TLSA\"}]}";
-        assertEquals(expectedEncode, json.encode());
+        assertEquals(expectedBodyResponse, json.encode());
         assertEquals(200, response.statusCode());
       }))
       .compose(next -> {
@@ -49,8 +49,7 @@ public class TestWatchListRestApi {
           .onComplete(testContext.succeeding(response -> {
             var json = response.bodyAsJsonObject();
             LOG.info("Response GET: {}", json);
-            var expectedEncode = "{\"assets\":[{\"name\":\"AMZN\"},{\"name\":\"TLSA\"}]}";
-            assertEquals(expectedEncode, json.encode());
+            assertEquals(expectedBodyResponse, json.encode());
             assertEquals(200, response.statusCode());
             testContext.completeNow();
           }));

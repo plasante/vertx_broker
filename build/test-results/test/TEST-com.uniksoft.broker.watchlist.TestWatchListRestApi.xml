@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.uniksoft.broker.watchlist.TestWatchListRestApi" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-09-02T13:04:14" hostname="DESKTOP-JQE2U8N" time="1.142">
+<testsuite name="com.uniksoft.broker.watchlist.TestWatchListRestApi" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-09-02T14:05:56" hostname="DESKTOP-JQE2U8N" time="0.069">
   <properties/>
-  <testcase name="adds_and_returns_watchlist_for_account(Vertx, VertxTestContext)" classname="com.uniksoft.broker.watchlist.TestWatchListRestApi" time="1.142"/>
-  <system-out><![CDATA[09:04:15.447 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
-09:04:15.978 [vert.x-eventloop-thread-3] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response PUT: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
-09:04:15.987 [vert.x-eventloop-thread-3] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response GET: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
+  <testcase name="adds_and_returns_watchlist_for_account(Vertx, VertxTestContext)" classname="com.uniksoft.broker.watchlist.TestWatchListRestApi" time="0.069"/>
+  <system-out><![CDATA[10:05:56.403 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+10:05:56.435 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response PUT: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
+10:05:56.440 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response GET: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
