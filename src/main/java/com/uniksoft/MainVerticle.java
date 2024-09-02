@@ -12,6 +12,7 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.BodyHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,7 +43,9 @@ public class MainVerticle extends MainVerticleAbstract {
     Router restApi = Router.router(vertx);
 
     // register a failure on all routes
-    restApi.route().failureHandler(errorContext -> {
+    restApi.route()
+      .handler(BodyHandler.create())     // This will enable body handling for all routes
+      .failureHandler(errorContext -> {
       handleRouteFailure(errorContext);
     });
 

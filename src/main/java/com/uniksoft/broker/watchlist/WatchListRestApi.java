@@ -20,11 +20,25 @@ public class WatchListRestApi {
 
     String path = "/account/watchlist/:accountId";
     getWatchList(parent, path, watchListPerAccount);
-    parent.put(path).handler(context -> {
+    putWatchList(parent, path, watchListPerAccount);
 
-    });
     parent.delete(path).handler(context -> {
 
+    });
+  }
+
+  private static void putWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
+    parent.put(path).handler(context -> {
+      var accountId = context.pathParam("accountId");
+      LOG.debug("{} for account {}", context.normalizedPath(), accountId);
+
+      var json = context.getBodyAsJson();
+      var watchList = json.mapTo(WatchList.class);
+      //Todo: This could fail if UUID is invalid or the body of the request
+      // is mal-formatted
+      watchListPerAccount.put(UUID.fromString(accountId), watchList);
+      // We return the response
+      context.response().end(json.toBuffer());
     });
   }
 
