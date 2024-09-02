@@ -1,6 +1,8 @@
 package com.uniksoft.broker.assets;
 
 import com.uniksoft.MainVerticle;
+import io.netty.handler.codec.http.HttpHeaderValues;
+import io.netty.handler.codec.http.HttpHeaders;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
@@ -44,6 +46,8 @@ public class TestAssetsRestApi {
         var expectedEncode = "[{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"FB\"},{\"name\":\"GOOG\"},{\"name\":\"MSFT\"},{\"name\":\"TSLA\"}]";
         assertEquals(expectedEncode, json.encode());
         assertEquals(200, response.statusCode());
+        assertEquals(HttpHeaderValues.APPLICATION_JSON.toString(),
+          response.getHeader("Content-Type"));
         testContext.completeNow();
       }));
   }
