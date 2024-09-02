@@ -27,7 +27,21 @@ public class WatchListRestApi {
   }
 
   private static void deleteWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
-
+    parent.delete(path).handler(context -> {
+      var accountId = getAccountId(context);
+      LOG.info("Entire HashMap: {}", watchListPerAccount);
+      LOG.info("AccountId to Get: {}", accountId);
+      final WatchList present = watchListPerAccount.get(accountId); // Here, we get the WatchList but don't delete yet
+      if (present != null) {
+        watchListPerAccount.remove(accountId); // Now we remove the WatchList
+        context.response()
+          .end(present.toJsonObject().encodePrettily());
+      } else {
+        context.response()
+          .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
+          .end(new JsonObject().put("message", "No watchlist found for accountId: " + accountId).encodePrettily());
+      }
+    });
   }
 
   private static void putWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
@@ -37,7 +51,7 @@ public class WatchListRestApi {
       var watchList = json.mapTo(WatchList.class);
       //Todo: This could fail if UUID is invalid or the body of the request
       // is mal-formatted
-      watchListPerAccount.put(UUID.fromString(accountId), watchList);
+      watchListPerAccount.put(UUID.fromString(String.valueOf(accountId)), watchList);
       // We return the response
       context.response().end(json.toBuffer());
     });
@@ -46,7 +60,7 @@ public class WatchListRestApi {
   private static void getWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
     parent.get(path).handler(context -> {
       var accountId = getAccountId(context);
-      var watchList = watchListPerAccount.get(UUID.fromString(accountId));
+      var watchList = watchListPerAccount.get(UUID.fromString(String.valueOf(accountId)));
       Optional.ofNullable(watchList)
         .ifPresentOrElse(
           accountWatchList -> context.response().end(accountWatchList.toJsonObject().encode()),
@@ -60,9 +74,9 @@ public class WatchListRestApi {
     });
   }
 
-  private static String getAccountId(RoutingContext context) {
+  private static UUID getAccountId(RoutingContext context) {
     var accountId = context.pathParam("accountId");
     LOG.debug("{} for account {}", context.normalizedPath(), accountId);
-    return accountId;
+    return UUID.fromString(accountId); //Explicit conversion to UUID
   }
 }

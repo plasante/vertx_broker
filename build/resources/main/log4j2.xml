@@ -25,6 +25,9 @@
     <Logger name="com.uniksoft.broker.watchlist.TestWatchListRestApi" level="info" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
+    <Logger name="com.uniksoft.broker.watchlist.WatchListRestApi" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
 
     <Root level="error">
       <AppenderRef ref="Console"/>
