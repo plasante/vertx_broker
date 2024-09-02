@@ -60,7 +60,7 @@ public class WatchListRestApi {
   private static void getWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
     parent.get(path).handler(context -> {
       var accountId = getAccountId(context);
-      var watchList = watchListPerAccount.get(UUID.fromString(String.valueOf(accountId)));
+      var watchList = watchListPerAccount.get(accountId);
       Optional.ofNullable(watchList)
         .ifPresentOrElse(
           accountWatchList -> context.response().end(accountWatchList.toJsonObject().encode()),
