@@ -46,8 +46,8 @@ public class MainVerticle extends MainVerticleAbstract {
     restApi.route()
       .handler(BodyHandler.create())     // This will enable body handling for all routes
       .failureHandler(errorContext -> {
-      handleRouteFailure(errorContext);
-    });
+        handleRouteFailure(errorContext);
+      });
 
     restApi.route("/favicon.ico").handler(this::handleFavicon);
 
