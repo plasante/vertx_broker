@@ -45,16 +45,7 @@ public class WatchListRestApi {
   }
 
   private static void putWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
-    parent.put(path).handler(context -> {
-      var accountId = getAccountId(context);
-      var json = context.getBodyAsJson();
-      var watchList = json.mapTo(WatchList.class);
-      //Todo: This could fail if UUID is invalid or the body of the request
-      // is mal-formatted
-      watchListPerAccount.put(UUID.fromString(String.valueOf(accountId)), watchList);
-      // We return the response
-      context.response().end(json.toBuffer());
-    });
+    parent.put(path).handler(new PutWatchListHandler(watchListPerAccount));
   }
 
   private static void getWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {

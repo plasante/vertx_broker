@@ -1,27 +1,27 @@
-o17:40:57.464 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
-o17:40:57.558 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
-o17:40:58.103 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
-o17:40:58.150 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
-	o17:40:58.215 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
-	†17:40:58.250 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response PUT: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
-	†17:40:58.253 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response GET: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
+o17:44:41.319 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+o17:44:41.404 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+o17:44:41.968 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+o17:44:42.017 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+	o17:44:42.085 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+	†17:44:42.116 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response PUT: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
+	†17:44:42.120 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response GET: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
 	
-o17:40:58.288 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+o17:44:42.155 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
 	
-†17:40:58.295 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response PUT: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
+†17:44:42.161 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response PUT: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
 	
-ô17:40:58.295 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - PUT accountId: 311d64b0-b98c-4240-81a2-90f58e028a01
+ô17:44:42.162 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - PUT accountId: 17c22132-b27e-4501-b098-0ccdd0d19f70
 	
-Ä17:40:58.297 [vert.x-eventloop-thread-0] INFO  com.uniksoft.broker.watchlist.WatchListRestApi - Entire HashMap: {311d64b0-b98c-4240-81a2-90f58e028a01=WatchList(assets=[com.uniksoft.broker.assets.Asset@7d913f2d, com.uniksoft.broker.assets.Asset@7dc57c0])}
+Å17:44:42.163 [vert.x-eventloop-thread-0] INFO  com.uniksoft.broker.watchlist.WatchListRestApi - Entire HashMap: {17c22132-b27e-4501-b098-0ccdd0d19f70=WatchList(assets=[com.uniksoft.broker.assets.Asset@50d8f3e4, com.uniksoft.broker.assets.Asset@2799ff59])}
 	
-ò17:40:58.297 [vert.x-eventloop-thread-0] INFO  com.uniksoft.broker.watchlist.WatchListRestApi - AccountId to Get: 311d64b0-b98c-4240-81a2-90f58e028a01
+ò17:44:42.163 [vert.x-eventloop-thread-0] INFO  com.uniksoft.broker.watchlist.WatchListRestApi - AccountId to Get: 17c22132-b27e-4501-b098-0ccdd0d19f70
 	
-£17:40:58.299 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response DELETE: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
+£17:44:42.165 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - Response DELETE: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
 	
-ú17:40:58.299 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - DELETE accountId: 311d64b0-b98c-4240-81a2-90f58e028a01
+ú17:44:42.165 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - DELETE accountId: 17c22132-b27e-4501-b098-0ccdd0d19f70
 	
-Ø17:40:58.299 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - DELETE expectedBodyResponse: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
+Ø17:44:42.165 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - DELETE expectedBodyResponse: {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
 	
-z17:40:58.299 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - DELETE response: 200
+z17:44:42.165 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - DELETE response: 200
 	
-®17:40:58.299 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - DELETE json.encode(): {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
+®17:44:42.166 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.watchlist.TestWatchListRestApi - DELETE json.encode(): {"assets":[{"name":"AMZN"},{"name":"TLSA"}]}
