@@ -58,23 +58,10 @@ public class WatchListRestApi {
   }
 
   private static void getWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
-    parent.get(path).handler(context -> {
-      var accountId = getAccountId(context);
-      var watchList = watchListPerAccount.get(accountId);
-      Optional.ofNullable(watchList)
-        .ifPresentOrElse(
-          accountWatchList -> context.response().end(accountWatchList.toJsonObject().encode()),
-          () -> context.response()
-            .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
-            .end(new JsonObject()
-              .put("message", "watchlist for account " + accountId + " not available!")
-              .put("path", context.normalizedPath())
-              .toBuffer()
-            ));
-    });
+    parent.get(path).handler(new GetWatchListHandler(watchListPerAccount));
   }
 
-  private static UUID getAccountId(RoutingContext context) {
+  static UUID getAccountId(RoutingContext context) {
     var accountId = context.pathParam("accountId");
     LOG.debug("{} for account {}", context.normalizedPath(), accountId);
     return UUID.fromString(accountId); //Explicit conversion to UUID
