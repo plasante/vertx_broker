@@ -25,28 +25,7 @@ public class QuotesRestApi {
     // Create an HTTP end point with path /quotes
     // :assets is a path parameter i.e. /quotes/AAPL
     // with .handler we get a routing context
-    parent.get("/quotes/:assets").handler(routingContext -> {
-      final String assetParam = routingContext.pathParam("assets");
-      LOG.info("Received request for asset: {}", assetParam);
-
-      // We return a fictitious asset
-      // It is possible that assetParam (i.e. AMZN) is not found
-      var maybeQuote = Optional.ofNullable(cachedQuotes.get(assetParam));
-      if (maybeQuote.isEmpty()) {
-        routingContext.response()
-          .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
-          .end(new JsonObject()
-            .put("message", "quote for asset " + assetParam + " not available!")
-            .put("path", routingContext.normalizedPath())
-            .toBuffer()
-          );
-        return;
-      }
-
-      final JsonObject response = maybeQuote.get().toJsonObject();
-      LOG.info("Path {} responds with {}", routingContext.normalisedPath(), response.encodePrettily());
-      routingContext.response().end(response.toBuffer());
-    });
+    parent.get("/quotes/:assets").handler(new GetQuotesHandler(cachedQuotes));
   }
 
   private static Quote initRandomQuote(String assetParam) {
