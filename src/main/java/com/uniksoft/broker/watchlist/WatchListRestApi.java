@@ -27,21 +27,7 @@ public class WatchListRestApi {
   }
 
   private static void deleteWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
-    parent.delete(path).handler(context -> {
-      var accountId = getAccountId(context);
-      LOG.info("Entire HashMap: {}", watchListPerAccount);
-      LOG.info("AccountId to Get: {}", accountId);
-      final WatchList present = watchListPerAccount.get(accountId); // Here, we get the WatchList but don't delete yet
-      if (present != null) {
-        watchListPerAccount.remove(accountId); // Now we remove the WatchList
-        context.response()
-          .end(present.toJsonObject().encodePrettily());
-      } else {
-        context.response()
-          .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
-          .end(new JsonObject().put("message", "No watchlist found for accountId: " + accountId).encodePrettily());
-      }
-    });
+    parent.delete(path).handler(new DeleteWatchListHandler(watchListPerAccount));
   }
 
   private static void putWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
