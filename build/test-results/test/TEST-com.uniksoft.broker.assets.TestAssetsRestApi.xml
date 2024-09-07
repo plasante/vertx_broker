@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.uniksoft.broker.assets.TestAssetsRestApi" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-09-02T17:55:25" hostname="DESKTOP-JQE2U8N" time="1.083">
+<testsuite name="com.uniksoft.broker.assets.TestAssetsRestApi" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-09-07T13:13:28" hostname="DESKTOP-JQE2U8N" time="0.631">
   <properties/>
-  <testcase name="return_all_assets(Vertx, VertxTestContext)" classname="com.uniksoft.broker.assets.TestAssetsRestApi" time="1.083"/>
-  <system-out><![CDATA[13:55:25.555 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+  <testcase name="return_all_assets(Vertx, VertxTestContext)" classname="com.uniksoft.broker.assets.TestAssetsRestApi" time="0.631"/>
+  <system-out><![CDATA[09:13:28.547 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
