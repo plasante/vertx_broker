@@ -1,14 +1,15 @@
 package com.uniksoft;
 
+import com.uniksoft.broker.RestApiVerticle;
 import com.uniksoft.broker.assets.AssetsRestApi;
 import com.uniksoft.broker.quotes.QuotesRestApi;
 import com.uniksoft.broker.watchlist.WatchListRestApi;
 import com.uniksoft.httpHandlers.*;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Promise;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -29,62 +30,31 @@ public class MainVerticle extends MainVerticleAbstract {
     vertx.exceptionHandler(error -> {
       LOG.error("Unhandled: {}", error);
     });
-    vertx.deployVerticle(new MainVerticle(), ar -> {
-      if (ar.failed()) {
-        LOG.error("Deployment failed: {}", ar.cause());
-        return;
-      }
-      LOG.info("Deployment successful: {}", ar.result());
-    });
+    vertx.deployVerticle(new MainVerticle())
+      .onFailure(err -> LOG.error("Failed to deploy: ", err))
+      .onSuccess(id -> {
+        LOG.info("MainVerticle deployed: {}", id);
+      });
   }
 
   @Override
   public void start(Promise<Void> startPromise) {
-    Router restApi = Router.router(vertx);
-
-    // register a failure on all routes
-    restApi.route()
-      .handler(BodyHandler.create())     // This will enable body handling for all routes
-      .failureHandler(errorContext -> {
-        handleRouteFailure(errorContext);
-      });
-
-    restApi.route("/favicon.ico").handler(this::handleFavicon);
-
-
-    Map<HttpMethod, RequestMethodHandler> strategies = getHttpMethodRequestMethodHandlerMap();
-
-    // Defining end points
-    AssetsRestApi.attach(restApi);
-    QuotesRestApi.attach(restApi);
-    WatchListRestApi.attach(restApi);
-
-//    restApi.route().handler(routingContext -> {
-//      HttpServerRequest request = routingContext.request();
-//      String path = request.path();
-//      // handlerStrategy will depend on GET PUT POST DELETE
-//      RequestMethodHandler handlerStrategy = strategies.get(request.method());
-//      handlerStrategy.handle(routingContext, path);
-//    });
-
-
-    vertx.createHttpServer()
-      .requestHandler(restApi)
-      .exceptionHandler(error -> LOG.error("HTTP Server error: {}", error))
-      .listen(PORT, http -> {
-        if (http.succeeded()) {
+    vertx.deployVerticle(RestApiVerticle.class.getName(),
+        new DeploymentOptions().setInstances(numberOfProcessors()))
+        .onFailure(startPromise::fail)
+        .onSuccess(id -> {
+          LOG.info("RestApiVerticle deployed: {}", id);
           startPromise.complete();
-          LOG.info("Vert.x server started on port {}", PORT);
-        } else {
-          startPromise.fail(http.cause());
-        }
-      });
+        });
   }
 
-  private static void handleRouteFailure(RoutingContext errorContext) {
+  private static int numberOfProcessors() {
+    return Math.max(1,Runtime.getRuntime().availableProcessors());
+  }
+
+  public static void handleRouteFailure(RoutingContext errorContext) {
     if (errorContext.response().ended()) {
       // We ignore completed response
-      return;
     } else {
       LOG.error("Route Error: {}", errorContext.failure());
       errorContext.response()
@@ -94,8 +64,6 @@ public class MainVerticle extends MainVerticleAbstract {
   }
 
   private void handleFavicon(RoutingContext routingContext) {
-    //LOG.info("Favicon requested");
-
     // You could also serve an actual icon here if you prefer
     routingContext.response().end();
   }
