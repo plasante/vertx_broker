@@ -30,6 +30,7 @@ To run your application:
 
 == PostgreSQL
 
+docker ps
 docker stop my-postgres
 docker rm my-postgres
 docker run --name my-postgres -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=vertx-share-broker -p 5432:5432 -d postgres:13.1-alpine
