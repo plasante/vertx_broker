@@ -28,4 +28,15 @@ To run your application:
 * https://groups.google.com/forum/?fromgroups#!forum/vertx[Vert.x User Group]
 * https://discord.gg/6ry7aqPWXy[Vert.x Discord]
 
+== PostgreSQL
+
+docker stop my-postgres
+docker rm my-postgres
+docker run --name my-postgres -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=vertx-share-broker -p 5432:5432 -d postgres:13.1-alpine
+
+docker-compose -f ./infra/postgres.yml up -d
+docker-compose -f ./infra/postgres.yml down
+
+== Access adminer in a browser
+URL = localhost:8081
 

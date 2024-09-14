@@ -49,7 +49,7 @@ public class MainVerticle extends MainVerticleAbstract {
   }
 
   private static int numberOfProcessors() {
-    return Math.max(1,Runtime.getRuntime().availableProcessors() / 2);
+    return Math.max(1,Runtime.getRuntime().availableProcessors());
   }
 
   public static void handleRouteFailure(RoutingContext errorContext) {
