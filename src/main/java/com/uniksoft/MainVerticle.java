@@ -1,23 +1,17 @@
 package com.uniksoft;
 
 import com.uniksoft.broker.RestApiVerticle;
-import com.uniksoft.broker.assets.AssetsRestApi;
-import com.uniksoft.broker.quotes.QuotesRestApi;
-import com.uniksoft.broker.watchlist.WatchListRestApi;
-import com.uniksoft.httpHandlers.*;
+import com.uniksoft.broker.config.DbConfig;
+import com.uniksoft.broker.db.migration.FlywayMigration;
 import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.BodyHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Map;
 
 
 public class MainVerticle extends MainVerticleAbstract {
@@ -42,10 +36,18 @@ public class MainVerticle extends MainVerticleAbstract {
     vertx.deployVerticle(RestApiVerticle.class.getName(),
         new DeploymentOptions().setInstances(numberOfProcessors()))
         .onFailure(startPromise::fail)
+        .compose(next -> migrateDatabase())
+          .onFailure(startPromise::fail)
+          .onSuccess(id -> LOG.info("Migrated db schema to latest version!"))
         .onSuccess(id -> {
           LOG.info("RestApiVerticle deployed: {}", id);
           startPromise.complete();
         });
+  }
+
+  private Future<Void> migrateDatabase() {
+    DbConfig dbConfig = DbConfig.builder().build();
+    return FlywayMigration.migrate(vertx, dbConfig);
   }
 
   private static int numberOfProcessors() {
