@@ -42,6 +42,7 @@ dependencies {
   implementation("org.flywaydb:flyway-core:8.5.4")
   implementation("org.postgresql:postgresql:42.3.1")
   implementation("io.vertx:vertx-web-client")
+  implementation("io.vertx:vertx-pg-client:4.2.3")
   "compileOnly"("org.projectlombok:lombok:1.18.22")
   "annotationProcessor"("org.projectlombok:lombok:1.18.22")
   "testCompileOnly"("org.projectlombok:lombok:1.18.22")

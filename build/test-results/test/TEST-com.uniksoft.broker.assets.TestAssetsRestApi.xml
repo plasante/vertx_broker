@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.uniksoft.broker.assets.TestAssetsRestApi" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-09-07T22:07:55" hostname="DESKTOP-JQE2U8N" time="0.586">
+<testsuite name="com.uniksoft.broker.assets.TestAssetsRestApi" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-09-14T21:40:37" hostname="DESKTOP-JQE2U8N" time="1.519">
   <properties/>
-  <testcase name="return_all_assets(Vertx, VertxTestContext)" classname="com.uniksoft.broker.assets.TestAssetsRestApi" time="0.586"/>
-  <system-out><![CDATA[18:07:55.260 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Vert.x server started on port 8888
+  <testcase name="return_all_assets(Vertx, VertxTestContext)" classname="com.uniksoft.broker.assets.TestAssetsRestApi" time="1.519"/>
+  <system-out><![CDATA[17:40:37.854 [vert.x-eventloop-thread-3] INFO  com.uniksoft.broker.RestApiVerticle - Vert.x server started on port 8888
+17:40:37.859 [vert.x-eventloop-thread-4] INFO  com.uniksoft.broker.RestApiVerticle - Vert.x server started on port 8888
+17:40:37.859 [vert.x-eventloop-thread-8] INFO  com.uniksoft.broker.RestApiVerticle - Vert.x server started on port 8888
+17:40:37.859 [vert.x-eventloop-thread-2] INFO  com.uniksoft.broker.RestApiVerticle - Vert.x server started on port 8888
+17:40:37.859 [vert.x-eventloop-thread-7] INFO  com.uniksoft.broker.RestApiVerticle - Vert.x server started on port 8888
+17:40:37.859 [vert.x-eventloop-thread-6] INFO  com.uniksoft.broker.RestApiVerticle - Vert.x server started on port 8888
+17:40:37.859 [vert.x-eventloop-thread-1] INFO  com.uniksoft.broker.RestApiVerticle - Vert.x server started on port 8888
+17:40:37.859 [vert.x-eventloop-thread-5] INFO  com.uniksoft.broker.RestApiVerticle - Vert.x server started on port 8888
+17:40:37.868 [vert.x-worker-thread-0] INFO  com.uniksoft.broker.db.migration.FlywayMigration - Migrating database using JDBC URL: jdbc:postgresql://localhost:5432/vertx-share-broker
+17:40:38.129 [vert.x-worker-thread-0] INFO  com.uniksoft.broker.db.migration.FlywayMigration - Current database version: 0.1
+17:40:38.176 [vert.x-worker-thread-0] INFO  com.uniksoft.broker.db.migration.FlywayMigration - Migrating database using Pending Migrations: []
+17:40:38.246 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - Migrated db schema to latest version!
+17:40:38.247 [vert.x-eventloop-thread-0] INFO  com.uniksoft.MainVerticle - RestApiVerticle deployed: null
+17:40:38.688 [vert.x-eventloop-thread-3] INFO  com.uniksoft.broker.assets.GetAssetsHandler - Path /assets responds with [{"name":"AAPL"},{"name":"AMZN"},{"name":"FB"},{"name":"GOOG"},{"name":"MSFT"},{"name":"TSLA"}]
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

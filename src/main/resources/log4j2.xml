@@ -37,6 +37,9 @@
     <Logger name="com.uniksoft.broker.db.migration.FlywayMigration" level="info" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
+    <Logger name="com.uniksoft.broker.assets.GetAssetFromDatabaseHandler" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
 
     <Root level="error">
       <AppenderRef ref="Console"/>

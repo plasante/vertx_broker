@@ -4,17 +4,16 @@ import com.uniksoft.MainVerticle;
 import com.uniksoft.broker.assets.AssetsRestApi;
 import com.uniksoft.broker.quotes.QuotesRestApi;
 import com.uniksoft.broker.watchlist.WatchListRestApi;
-import com.uniksoft.httpHandlers.RequestMethodHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
-import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.pgclient.PgConnectOptions;
+import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.PoolOptions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Map;
 
 import static com.uniksoft.MainVerticle.handleRouteFailure;
 
@@ -28,6 +27,10 @@ public class RestApiVerticle extends AbstractVerticle {
   }
 
   public void startHttpServerAndAttachRoutes(final Promise<Void> startPromise) throws Exception {
+
+    // One pool for each Rest Api Verticle
+    final PgPool db = createDbPool();
+
     Router restApi = Router.router(vertx);
 
     // register a failure on all routes
@@ -40,7 +43,7 @@ public class RestApiVerticle extends AbstractVerticle {
     restApi.route("/favicon.ico").handler(this::handleFavicon);
 
     // Defining end points
-    AssetsRestApi.attach(restApi);
+    AssetsRestApi.attach(restApi, db);
     QuotesRestApi.attach(restApi);
     WatchListRestApi.attach(restApi);
 
@@ -55,6 +58,22 @@ public class RestApiVerticle extends AbstractVerticle {
           startPromise.fail(http.cause());
         }
       });
+  }
+
+  private PgPool createDbPool() {
+    // Create DB Pool
+    final var pgConnectOptions = new PgConnectOptions()
+      .setHost("localhost")
+      .setPort(5432)
+      .setDatabase("vertx-share-broker")
+      .setUser("postgres")
+      .setPassword("secret");
+
+    var poolOptions = new PoolOptions()
+      .setMaxSize(4);
+
+    final PgPool db = PgPool.pool(vertx, pgConnectOptions, poolOptions);
+    return db;
   }
 
   private void handleFavicon(RoutingContext routingContext) {
