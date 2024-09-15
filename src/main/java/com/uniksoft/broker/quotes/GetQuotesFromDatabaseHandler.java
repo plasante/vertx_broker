@@ -31,6 +31,7 @@ public class GetQuotesFromDatabaseHandler implements Handler<RoutingContext> {
 
     SqlTemplate.forQuery(db,
       "SELECT q.asset, q.bid, q.ask, q.last_price, q.volume FROM broker.quotes q WHERE asset=#{assetParam}")
+        .mapTo(QuoteEntity.class)
         .execute(Collections.singletonMap("assetParam", assetParam))
         .onFailure(error -> {
           LOG.error("Database request failed with error: {}", error.getMessage());
@@ -41,8 +42,9 @@ public class GetQuotesFromDatabaseHandler implements Handler<RoutingContext> {
             DBResponse.notFound(context, "No quotes found for asset " + assetParam);
             return;
           } else {
-            List<QuoteEntity> quoteEntities = getQuoteEntities(result);
-            var response = quoteEntities.iterator().next().toJsonObject();
+            //List<QuoteEntity> quoteEntities = getQuoteEntities(result);
+            //var response = quoteEntities.iterator().next().toJsonObject();
+            var response = result.iterator().next().toJsonObject();
             LOG.info("Successfully retrieved quotes {} for asset {}", response.encodePrettily(), assetParam);
             context.response()
               .putHeader("content-type", "application/json")
