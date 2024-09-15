@@ -11,6 +11,7 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.PoolOptions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +30,7 @@ public class RestApiVerticle extends AbstractVerticle {
   public void startHttpServerAndAttachRoutes(final Promise<Void> startPromise) throws Exception {
 
     // One pool for each Rest Api Verticle
-    final PgPool db = createDbPool();
+    final Pool db = createDbPool();
 
     Router restApi = Router.router(vertx);
 
@@ -44,7 +45,7 @@ public class RestApiVerticle extends AbstractVerticle {
 
     // Defining end points
     AssetsRestApi.attach(restApi, db);
-    QuotesRestApi.attach(restApi);
+    QuotesRestApi.attach(restApi, db);
     WatchListRestApi.attach(restApi);
 
     vertx.createHttpServer()

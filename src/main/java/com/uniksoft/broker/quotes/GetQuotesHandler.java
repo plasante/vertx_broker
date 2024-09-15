@@ -1,5 +1,6 @@
 package com.uniksoft.broker.quotes;
 
+import com.uniksoft.broker.DBResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -27,13 +28,7 @@ public class GetQuotesHandler implements Handler<RoutingContext> {
     // It is possible that assetParam (i.e. AMZN) is not found
     var maybeQuote = Optional.ofNullable(cachedQuotes.get(assetParam));
     if (maybeQuote.isEmpty()) {
-      routingContext.response()
-        .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
-        .end(new JsonObject()
-          .put("message", "quote for asset " + assetParam + " not available!")
-          .put("path", routingContext.normalizedPath())
-          .toBuffer()
-        );
+      DBResponse.notFound(routingContext, "quote for asset " + assetParam + " not found");
       return;
     }
 
