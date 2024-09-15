@@ -4,6 +4,8 @@ import com.uniksoft.broker.DBResponse;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.sqlclient.Pool;
+import io.vertx.sqlclient.Row;
+import io.vertx.sqlclient.RowSet;
 import io.vertx.sqlclient.templates.SqlTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,35 +31,37 @@ public class GetQuotesFromDatabaseHandler implements Handler<RoutingContext> {
 
     SqlTemplate.forQuery(db,
       "SELECT q.asset, q.bid, q.ask, q.last_price, q.volume FROM broker.quotes q WHERE asset=#{assetParam}")
-        //.mapTo(QuoteEntity.class)
-        // in the background vertx is using jackson-databind
         .execute(Collections.singletonMap("assetParam", assetParam))
         .onFailure(error -> {
           LOG.error("Database request failed with error: {}", error.getMessage());
           DBResponse.errorHandler2(context, "Failed to get quote for asset " + assetParam + " in DB");
         })
         .onSuccess(result -> {
-          LOG.info("Successfully get quotes for asset {}", assetParam);
           if (result.size() == 0) {
             DBResponse.notFound(context, "No quotes found for asset " + assetParam);
             return;
           } else {
-            List<QuoteEntity> quoteList = new ArrayList<>();
-            result.forEach(row -> {
-              QuoteEntity quote = new QuoteEntity();
-                quote.setAsset(row.getString("asset"));
-                quote.setBid(row.getBigDecimal("bid"));
-                quote.setAsk(row.getBigDecimal("ask"));
-                quote.setLastPrice(row.getBigDecimal("last_price"));
-                quote.setVolume(row.getBigDecimal("volume"));
-                quoteList.add(quote);
-              });
-              var response = quoteList.iterator().next().toJsonObject();
-              LOG.info("Successfully retrieved quotes for asset {}", assetParam);
-              context.response()
-                .putHeader("content-type", "application/json")
-                .end(response.encodePrettily());
+            List<QuoteEntity> quoteEntities = getQuoteEntities(result);
+            var response = quoteEntities.iterator().next().toJsonObject();
+            LOG.info("Successfully retrieved quotes {} for asset {}", response.encodePrettily(), assetParam);
+            context.response()
+              .putHeader("content-type", "application/json")
+              .end(response.encodePrettily());
             };
         });
+  }
+
+  private static List<QuoteEntity> getQuoteEntities(RowSet<Row> result) {
+    List<QuoteEntity> quoteList = new ArrayList<>();
+    result.forEach(row -> {
+      QuoteEntity quote = new QuoteEntity();
+        quote.setAsset(row.getString("asset"));
+        quote.setBid(row.getBigDecimal("bid"));
+        quote.setAsk(row.getBigDecimal("ask"));
+        quote.setLastPrice(row.getBigDecimal("last_price"));
+        quote.setVolume(row.getBigDecimal("volume"));
+        quoteList.add(quote);
+      });
+    return quoteList;
   }
 }
