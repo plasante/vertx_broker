@@ -8,6 +8,9 @@ Content-Type: application/json
     },
     {
       "name": "MSFT"
+    },
+    {
+      "name": "NF"
     }
   ]
 }

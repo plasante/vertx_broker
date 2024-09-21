@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PutWatchListDatabaseHandler implements Handler<RoutingContext> {
 
@@ -32,25 +33,51 @@ public class PutWatchListDatabaseHandler implements Handler<RoutingContext> {
     var json = context.getBodyAsJson();
     var watchList = json.mapTo(WatchList.class);
 
-    watchList.getAssets().forEach(asset -> {
-      final HashMap<String, Object> parameters = new HashMap<>();
-      parameters.put("account_id", accountId.toString());
-      parameters.put("asset", asset.getName());
-      SqlTemplate.forUpdate(db,
-        "INSERT INTO broker.watchlist VALUES (#{account_id}, #{asset})")
-        .execute(parameters)
-        .onFailure(error -> {
-          LOG.error("Database insert asset into watchlist failed :", error);
-          DBResponse.errorHandler2(context, "Failed to insert into watchlist");
-        })
-        .onSuccess(result -> {
-          if (!context.response().ended()) {
-            LOG.info("Database insert asset into watchlist completed");
-            context.response()
-              .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
-              .end();
-          }
-        });
-    });
+    // inserting in a batch
+    var parameterBatch = watchList.getAssets().stream()
+      .map(asset -> {
+        final Map<String, Object> parameters = new HashMap<>();
+        parameters.put("account_id", accountId.toString());
+        parameters.put("asset", asset.getName());
+        return parameters;
+      }).collect(Collectors.toUnmodifiableList());
+
+    // Only adding is possible
+    SqlTemplate.forUpdate(db,
+      "INSERT INTO broker.watchlist VALUES (#{account_id}, #{asset})"
+       + " ON CONFLICT (account_id, asset) DO NOTHING")
+      .executeBatch(parameterBatch)
+      .onFailure(error -> {
+        LOG.error("Database insert asset into watchlist failed :", error);
+        DBResponse.errorHandler2(context, "Failed to insert into watchlist");
+      })
+      .onSuccess(result -> {
+        LOG.info("Database insert asset into watchlist completed");
+        context.response()
+          .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
+          .end();
+      });
+
+    // inserting one by one is very inefficient
+//    watchList.getAssets().forEach(asset -> {
+//      final HashMap<String, Object> parameters = new HashMap<>();
+//      parameters.put("account_id", accountId.toString());
+//      parameters.put("asset", asset.getName());
+//      SqlTemplate.forUpdate(db,
+//        "INSERT INTO broker.watchlist VALUES (#{account_id}, #{asset})")
+//        .execute(parameters)
+//        .onFailure(error -> {
+//          LOG.error("Database insert asset into watchlist failed :", error);
+//          DBResponse.errorHandler2(context, "Failed to insert into watchlist");
+//        })
+//        .onSuccess(result -> {
+//          if (!context.response().ended()) {
+//            LOG.info("Database insert asset into watchlist completed");
+//            context.response()
+//              .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
+//              .end();
+//          }
+//        });
+//    });
   }
 }
