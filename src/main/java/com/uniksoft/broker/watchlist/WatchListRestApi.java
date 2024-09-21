@@ -1,21 +1,19 @@
 package com.uniksoft.broker.watchlist;
 
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.sqlclient.Pool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.UUID;
 
 public class WatchListRestApi {
 
   private static final Logger LOG = LoggerFactory.getLogger(WatchListRestApi.class);
 
-  public static void attach(final Router parent) {
+  public static void attach(final Router parent, Pool db) {
     // We use InMemory WatchList
     final HashMap<UUID, WatchList> watchListPerAccount = new HashMap<>();
 
@@ -23,7 +21,10 @@ public class WatchListRestApi {
     getWatchList(parent, path, watchListPerAccount);
     putWatchList(parent, path, watchListPerAccount);
     deleteWatchList(parent, path, watchListPerAccount);
-
+System.out.println(watchListPerAccount);
+    LOG.info("Accessing /pg/account/watchlist" + watchListPerAccount.values());
+    String pgPath = "/pg/account/watchlist/:accountId";
+    parent.get(pgPath).handler(new GetWatchListFromDatabaseHandler(db));
   }
 
   private static void deleteWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
