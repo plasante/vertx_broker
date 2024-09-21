@@ -21,10 +21,10 @@ public class WatchListRestApi {
     getWatchList(parent, path, watchListPerAccount);
     putWatchList(parent, path, watchListPerAccount);
     deleteWatchList(parent, path, watchListPerAccount);
-System.out.println(watchListPerAccount);
-    LOG.info("Accessing /pg/account/watchlist" + watchListPerAccount.values());
+
     String pgPath = "/pg/account/watchlist/:accountId";
     parent.get(pgPath).handler(new GetWatchListFromDatabaseHandler(db));
+    parent.put(pgPath).handler(new PutWatchListDatabaseHandler(db));
   }
 
   private static void deleteWatchList(Router parent, String path, HashMap<UUID, WatchList> watchListPerAccount) {
