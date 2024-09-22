@@ -6,10 +6,16 @@ import lombok.Value;
 @Value
 @Builder
 public class DbConfig {
+//  String host = "localhost";
+//  int port = 5432;
+//  String database = "vertx-share-broker";
+//  String user = "postgres";
+//  String password = "secret";
+
   String host = "localhost";
-  int port = 5432;
+  int port = 3307;
   String database = "vertx-share-broker";
-  String user = "postgres";
+  String user = "root";
   String password = "secret";
 
   @Override

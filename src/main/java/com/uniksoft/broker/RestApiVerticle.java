@@ -9,6 +9,9 @@ import io.vertx.core.Promise;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.mysqlclient.MySQLConnectOptions;
+import io.vertx.mysqlclient.MySQLPool;
+import io.vertx.mysqlclient.impl.MySQLPoolImpl;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.Pool;
@@ -30,7 +33,8 @@ public class RestApiVerticle extends AbstractVerticle {
   public void startHttpServerAndAttachRoutes(final Promise<Void> startPromise) throws Exception {
 
     // One pool for each Rest Api Verticle
-    final Pool db = createDbPool();
+    //final Pool db = createDbPool();
+    final Pool db = createMySQLPool();
 
     Router restApi = Router.router(vertx);
 
@@ -59,6 +63,20 @@ public class RestApiVerticle extends AbstractVerticle {
           startPromise.fail(http.cause());
         }
       });
+  }
+
+  private Pool createMySQLPool() {
+    final var connectOptions = new MySQLConnectOptions()
+      .setHost("localhost")
+      .setPort(3307)
+      .setDatabase("vertx-share-broker")
+      .setUser("root")
+      .setPassword("secret");
+
+    var poolOptions = new PoolOptions()
+      .setMaxSize(4);
+
+    return MySQLPool.pool(vertx, connectOptions, poolOptions);
   }
 
   private PgPool createDbPool() {

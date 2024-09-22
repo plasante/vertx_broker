@@ -35,8 +35,13 @@ docker stop my-postgres
 docker rm my-postgres
 docker run --name my-postgres -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=vertx-share-broker -p 5432:5432 -d postgres:13.1-alpine
 
-docker-compose -f ./infra/postgres.yml up -d
-docker-compose -f ./infra/postgres.yml down
+docker-compose -f ./infra/postgres/postgres.yml up -d
+docker-compose -f ./infra/postgres/postgres.yml down
+
+== Mysql
+docker-compose -f ./infra/mysql/mysql.yml up -d
+docker-compose -f ./infra/mysql/mysql.yml down
+
 
 == Access adminer in a browser
 URL = localhost:8081

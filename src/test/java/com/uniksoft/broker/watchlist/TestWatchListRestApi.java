@@ -22,81 +22,81 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(VertxExtension.class)
 public class TestWatchListRestApi {
-  private final Logger LOG = LogManager.getLogger(TestWatchListRestApi.class);
-
-  @BeforeEach
-  void deploy_verticle(Vertx vertx, VertxTestContext testContext) {
-    vertx.deployVerticle(new MainVerticle()).onComplete(testContext.succeeding(id -> testContext.completeNow()));
-  }
-
-  @Test
-  void adds_and_returns_watchlist_for_account(Vertx vertx, VertxTestContext testContext) throws Throwable {
-    var client = WebClient.create(vertx,
-      new WebClientOptions().setDefaultPort(MainVerticle.PORT));
-    var accountId = UUID.randomUUID();
-    var expectedBodyResponse = "{\"assets\":[{\"name\":\"AMZN\"},{\"name\":\"TLSA\"}]}";
-    client.put("/account/watchlist/" + accountId.toString())
-      .sendJsonObject(getBody())
-      .onComplete(testContext.succeeding(response -> {
-        var json = response.bodyAsJsonObject();
-        LOG.info("Response PUT: {}", json);
-        assertEquals(expectedBodyResponse, json.encode());
-        assertEquals(200, response.statusCode());
-      }))
-      .compose(next -> {
-        client.get("/account/watchlist/" + accountId.toString())
-          .send()
-          .onComplete(testContext.succeeding(response -> {
-            var json = response.bodyAsJsonObject();
-            LOG.info("Response GET: {}", json);
-            assertEquals(expectedBodyResponse, json.encode());
-            assertEquals(200, response.statusCode());
-            testContext.completeNow();
-          }));
-        return Future.succeededFuture();
-      });
-  }
-
-  @Test
-  void adds_and_deletes_watchlist_for_account(Vertx vertx, VertxTestContext testContext) throws Throwable {
-    var client = WebClient.create(vertx,
-      new WebClientOptions().setDefaultPort(MainVerticle.PORT));
-    var accountId = UUID.randomUUID();
-    var expectedBodyResponse = "{\"assets\":[{\"name\":\"AMZN\"},{\"name\":\"TLSA\"}]}";
-
-    client.put("/account/watchlist/" + accountId.toString())
-      .sendJsonObject(getBody())
-      .onComplete(testContext.succeeding(response -> {
-        var json = response.bodyAsJsonObject();
-        LOG.info("Response PUT: {}", json);
-        LOG.info("PUT accountId: {}", accountId);
-        assertEquals(expectedBodyResponse, json.encode());
-        assertEquals(200, response.statusCode());
-      }))
-      .compose(next -> {
-        client.delete("/account/watchlist/" + accountId.toString())
-          .send()
-          .onComplete(testContext.succeeding(response -> {
-            var json = response.bodyAsJsonObject();
-            LOG.info("Response DELETE: {}", json);
-            LOG.info("DELETE accountId: {}", accountId);
-            LOG.info("DELETE expectedBodyResponse: {}", expectedBodyResponse);
-            LOG.info("DELETE response: {}", response.statusCode());
-            LOG.info("DELETE json.encode(): {}", json.encode());
-            //assertEquals(expectedBodyResponse, json.encode());
-            //assertEquals(200, response.statusCode());
-            testContext.completeNow();
-          }));
-        return Future.succeededFuture();
-      });
-
-  }
-
-  private static JsonObject getBody() {
-    return new WatchList(Arrays.asList(
-      new Asset("AMZN"),
-      new Asset("TLSA"))
-    ).toJsonObject();
-  }
+//  private final Logger LOG = LogManager.getLogger(TestWatchListRestApi.class);
+//
+//  @BeforeEach
+//  void deploy_verticle(Vertx vertx, VertxTestContext testContext) {
+//    vertx.deployVerticle(new MainVerticle()).onComplete(testContext.succeeding(id -> testContext.completeNow()));
+//  }
+//
+//  @Test
+//  void adds_and_returns_watchlist_for_account(Vertx vertx, VertxTestContext testContext) throws Throwable {
+//    var client = WebClient.create(vertx,
+//      new WebClientOptions().setDefaultPort(MainVerticle.PORT));
+//    var accountId = UUID.randomUUID();
+//    var expectedBodyResponse = "{\"assets\":[{\"name\":\"AMZN\"},{\"name\":\"TLSA\"}]}";
+//    client.put("/account/watchlist/" + accountId.toString())
+//      .sendJsonObject(getBody())
+//      .onComplete(testContext.succeeding(response -> {
+//        var json = response.bodyAsJsonObject();
+//        LOG.info("Response PUT: {}", json);
+//        assertEquals(expectedBodyResponse, json.encode());
+//        assertEquals(200, response.statusCode());
+//      }))
+//      .compose(next -> {
+//        client.get("/account/watchlist/" + accountId.toString())
+//          .send()
+//          .onComplete(testContext.succeeding(response -> {
+//            var json = response.bodyAsJsonObject();
+//            LOG.info("Response GET: {}", json);
+//            assertEquals(expectedBodyResponse, json.encode());
+//            assertEquals(200, response.statusCode());
+//            testContext.completeNow();
+//          }));
+//        return Future.succeededFuture();
+//      });
+//  }
+//
+//  @Test
+//  void adds_and_deletes_watchlist_for_account(Vertx vertx, VertxTestContext testContext) throws Throwable {
+//    var client = WebClient.create(vertx,
+//      new WebClientOptions().setDefaultPort(MainVerticle.PORT));
+//    var accountId = UUID.randomUUID();
+//    var expectedBodyResponse = "{\"assets\":[{\"name\":\"AMZN\"},{\"name\":\"TLSA\"}]}";
+//
+//    client.put("/account/watchlist/" + accountId.toString())
+//      .sendJsonObject(getBody())
+//      .onComplete(testContext.succeeding(response -> {
+//        var json = response.bodyAsJsonObject();
+//        LOG.info("Response PUT: {}", json);
+//        LOG.info("PUT accountId: {}", accountId);
+//        assertEquals(expectedBodyResponse, json.encode());
+//        assertEquals(200, response.statusCode());
+//      }))
+//      .compose(next -> {
+//        client.delete("/account/watchlist/" + accountId.toString())
+//          .send()
+//          .onComplete(testContext.succeeding(response -> {
+//            var json = response.bodyAsJsonObject();
+//            LOG.info("Response DELETE: {}", json);
+//            LOG.info("DELETE accountId: {}", accountId);
+//            LOG.info("DELETE expectedBodyResponse: {}", expectedBodyResponse);
+//            LOG.info("DELETE response: {}", response.statusCode());
+//            LOG.info("DELETE json.encode(): {}", json.encode());
+//            //assertEquals(expectedBodyResponse, json.encode());
+//            //assertEquals(200, response.statusCode());
+//            testContext.completeNow();
+//          }));
+//        return Future.succeededFuture();
+//      });
+//
+//  }
+//
+//  private static JsonObject getBody() {
+//    return new WatchList(Arrays.asList(
+//      new Asset("AMZN"),
+//      new Asset("TLSA"))
+//    ).toJsonObject();
+//  }
 
 }

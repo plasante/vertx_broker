@@ -1,0 +1,22 @@
+services:
+
+  db:
+    image: postgres:13.1-alpine
+    environment:
+      #create db
+      POSTGRES_DB: vertx-share-broker
+      # use postgres/secret user/password credentials
+      POSTGRES_PASSWORD: secret
+      TZ: UTC
+    volumes:
+      - vertx-share-broker-data-local:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer:4
+    ports:
+      - 8081:8080
+
+volumes:
+  vertx-share-broker-data-local:

@@ -40,14 +40,19 @@ dependencies {
   implementation("org.apache.logging.log4j:log4j-slf4j18-impl:2.17.1")
   implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
   implementation("org.flywaydb:flyway-core:8.5.4")
-  implementation("org.postgresql:postgresql:42.3.1")
+  implementation("org.flywaydb:flyway-mysql:8.5.4")
+  runtimeOnly("mysql:mysql-connector-java:8.0.28")
+  //implementation("org.postgresql:postgresql:42.3.1")
   implementation("io.vertx:vertx-web-client")
   implementation("io.vertx:vertx-pg-client:4.2.3")
   implementation("io.vertx:vertx-sql-client-templates")
+  implementation("io.vertx:vertx-mysql-client:4.1.2")
+  runtimeOnly("mysql:mysql-connector-java:8.0.28")
   "compileOnly"("org.projectlombok:lombok:1.18.22")
   "annotationProcessor"("org.projectlombok:lombok:1.18.22")
   "testCompileOnly"("org.projectlombok:lombok:1.18.22")
   "testAnnotationProcessor"("org.projectlombok:lombok:1.18.22")
+  "runtimeOnly"("org.postgresql:postgresql:42.3.1")
 }
 
 java {

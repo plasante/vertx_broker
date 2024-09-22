@@ -1,13 +1,13 @@
-PUT http://localhost:8888/pg/account/watchlist/445073b3-f305-4288-ab7c-9be8c820fba9
-Content-Type: application/json
-
-{
-  "assets": [
-    {
-      "name": "MSFT"
-    },
-    {
-      "name": "NF"
-    }
-  ]
-}
+#PUT http://localhost:8888/pg/account/watchlist/445073b3-f305-4288-ab7c-9be8c820fba9
+#Content-Type: application/json
+#
+#{
+#  "assets": [
+#    {
+#      "name": "MSFT"
+#    },
+#    {
+#      "name": "NF"
+#    }
+#  ]
+#}

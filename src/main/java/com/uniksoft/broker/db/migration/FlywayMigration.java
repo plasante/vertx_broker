@@ -19,14 +19,24 @@ public class FlywayMigration {
 
   public static Future<Void> migrate(Vertx vertx, DbConfig dbConfig) {
     return vertx.<Void>executeBlocking(promise -> {
-      // Flyway migration is blocking because it uses JDBC
-      execute(dbConfig);
-      promise.complete();
+      try {
+        // explicitly load MySQL driver class
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        // Flyway migration is blocking because it uses JDBC
+        execute(dbConfig);
+        promise.complete();
+      } catch (ClassNotFoundException e) {
+        promise.fail(e);
+      }
     }).onFailure(err -> LOG.error("Failed to migrate db schema error: ", err));
   }
 
   private static void execute(DbConfig dbConfig) {
-    final String jdbcUrl = String.format("jdbc:postgresql://%s:%s/%s",
+    //var database = "postgresql";
+    var database = "mysql";
+    final String jdbcUrl = String.format("jdbc:%s://%s:%s/%s",
+      database,
       dbConfig.getHost(),
       dbConfig.getPort(),
       dbConfig.getDatabase()
@@ -45,6 +55,7 @@ public class FlywayMigration {
     var pendingMigrations = flyway.info().pending();
     LOG.info("Migrating database using Pending Migrations: {}", printMigrations(pendingMigrations));
 
+    //flyway.clean();
     flyway.migrate();
   }
 

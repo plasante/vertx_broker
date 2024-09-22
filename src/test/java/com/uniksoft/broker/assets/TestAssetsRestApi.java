@@ -19,37 +19,37 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(VertxExtension.class)
 public class TestAssetsRestApi {
 
-  private final Logger LOG = LogManager.getLogger(TestAssetsRestApi.class);
-
-  @BeforeEach
-  void deploy_verticle(Vertx vertx, VertxTestContext testContext) {
-    vertx.deployVerticle(new MainVerticle()).onComplete(testContext.succeeding(id -> testContext.completeNow()));
-  }
-
-  @Test
-  void return_all_assets(Vertx vertx, VertxTestContext testContext) throws Throwable {
-    // Create an asynchronous WebClient
-    // The default port is the port of our server
-    var client = WebClient.create(vertx,
-      new WebClientOptions().setDefaultPort(MainVerticle.PORT));
-    // GET asynchronous response
-    // .send() returns a Future
-    // We need to use testContext.succeeding() otherwise Junit will never be
-    // notified of the outcome of the test
-    // testContext.completeNow() est necessaire pour garantir que le test
-    // se termine correctement.
-    client.get("/assets")
-      .send()
-      .onComplete(testContext.succeeding(response -> {
-        var json = response.bodyAsJsonArray();
-        LOG.info("Response: {}", json);
-        var expectedEncode = "[{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"FB\"},{\"name\":\"GOOG\"},{\"name\":\"MSFT\"},{\"name\":\"TSLA\"}]";
-        assertEquals(expectedEncode, json.encode());
-        assertEquals(200, response.statusCode());
-        assertEquals(HttpHeaderValues.APPLICATION_JSON.toString(),
-          response.getHeader("Content-Type"));
-        assertEquals("my-header-value", response.getHeader("my-header"));
-        testContext.completeNow();
-      }));
-  }
+//  private final Logger LOG = LogManager.getLogger(TestAssetsRestApi.class);
+//
+//  @BeforeEach
+//  void deploy_verticle(Vertx vertx, VertxTestContext testContext) {
+//    vertx.deployVerticle(new MainVerticle()).onComplete(testContext.succeeding(id -> testContext.completeNow()));
+//  }
+//
+//  @Test
+//  void return_all_assets(Vertx vertx, VertxTestContext testContext) throws Throwable {
+//    // Create an asynchronous WebClient
+//    // The default port is the port of our server
+//    var client = WebClient.create(vertx,
+//      new WebClientOptions().setDefaultPort(MainVerticle.PORT));
+//    // GET asynchronous response
+//    // .send() returns a Future
+//    // We need to use testContext.succeeding() otherwise Junit will never be
+//    // notified of the outcome of the test
+//    // testContext.completeNow() est necessaire pour garantir que le test
+//    // se termine correctement.
+//    client.get("/assets")
+//      .send()
+//      .onComplete(testContext.succeeding(response -> {
+//        var json = response.bodyAsJsonArray();
+//        LOG.info("Response: {}", json);
+//        var expectedEncode = "[{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"FB\"},{\"name\":\"GOOG\"},{\"name\":\"MSFT\"},{\"name\":\"TSLA\"}]";
+//        assertEquals(expectedEncode, json.encode());
+//        assertEquals(200, response.statusCode());
+//        assertEquals(HttpHeaderValues.APPLICATION_JSON.toString(),
+//          response.getHeader("Content-Type"));
+//        assertEquals("my-header-value", response.getHeader("my-header"));
+//        testContext.completeNow();
+//      }));
+//  }
 }

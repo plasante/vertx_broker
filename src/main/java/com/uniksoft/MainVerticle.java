@@ -46,8 +46,10 @@ public class MainVerticle extends MainVerticleAbstract {
   }
 
   private Future<Void> migrateDatabase() {
-    DbConfig dbConfig = DbConfig.builder().build();
-    return FlywayMigration.migrate(vertx, dbConfig);
+//    DbConfig dbConfig = DbConfig.builder().build();
+//    return FlywayMigration.migrate(vertx, dbConfig);
+    DbConfig dbConfigMysql = DbConfig.builder().build();
+    return FlywayMigration.migrate(vertx, dbConfigMysql);
   }
 
   private static int numberOfProcessors() {
