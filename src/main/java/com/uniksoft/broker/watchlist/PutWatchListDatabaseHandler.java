@@ -45,13 +45,15 @@ public class PutWatchListDatabaseHandler implements Handler<RoutingContext> {
 
     // Transaction
     db.withTransaction(client -> {
+      LOG.info("Starting putWatchList database handling");
       return SqlTemplate.forUpdate(client,
-        "DELETE * FROM broker.watchlist w WHERE w.account_id = #{account_id}")
+        "DELETE FROM broker.watchlist w WHERE w.account_id = #{account_id}")
         .execute(Collections.singletonMap("account_id", accountId.toString()))
         .onFailure(error -> DBResponse.errorHandler2(context, "Failed to clear watchlist for account_id: " + accountId))
-        .onSuccess(result-> LOG.info("Successfully cleared watchlist for account_id: " + accountId))
+        //.onSuccess(result-> LOG.info("Successfully cleared watchlist for account_id: " + accountId))
         .compose(deletionDone -> {
-          return SqlTemplate.forUpdate(db,
+          LOG.info("Successfully cleared watchlist for account_id: " + accountId);
+          return SqlTemplate.forUpdate(client,
               "INSERT INTO broker.watchlist VALUES (#{account_id}, #{asset})"
                 + " ON CONFLICT (account_id, asset) DO NOTHING")
             .executeBatch(parameterBatch)
