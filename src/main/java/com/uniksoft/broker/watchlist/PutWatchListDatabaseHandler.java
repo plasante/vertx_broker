@@ -9,6 +9,7 @@ import io.vertx.sqlclient.templates.SqlTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,21 +43,46 @@ public class PutWatchListDatabaseHandler implements Handler<RoutingContext> {
         return parameters;
       }).collect(Collectors.toUnmodifiableList());
 
+    // Transaction
+    db.withTransaction(client -> {
+      return SqlTemplate.forUpdate(client,
+        "DELETE * FROM broker.watchlist w WHERE w.account_id = #{account_id}")
+        .execute(Collections.singletonMap("account_id", accountId.toString()))
+        .onFailure(error -> DBResponse.errorHandler2(context, "Failed to clear watchlist for account_id: " + accountId))
+        .onSuccess(result-> LOG.info("Successfully cleared watchlist for account_id: " + accountId))
+        .compose(deletionDone -> {
+          return SqlTemplate.forUpdate(db,
+              "INSERT INTO broker.watchlist VALUES (#{account_id}, #{asset})"
+                + " ON CONFLICT (account_id, asset) DO NOTHING")
+            .executeBatch(parameterBatch)
+            .onFailure(error -> {
+              LOG.error("Database insert asset into watchlist failed :", error);
+              DBResponse.errorHandler2(context, "Failed to insert into watchlist");
+            })
+            .onSuccess(result -> {
+              LOG.info("Database insert asset into watchlist completed");
+              context.response()
+                .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
+                .end();
+            });
+        });
+    });
+
     // Only adding is possible
-    SqlTemplate.forUpdate(db,
-      "INSERT INTO broker.watchlist VALUES (#{account_id}, #{asset})"
-       + " ON CONFLICT (account_id, asset) DO NOTHING")
-      .executeBatch(parameterBatch)
-      .onFailure(error -> {
-        LOG.error("Database insert asset into watchlist failed :", error);
-        DBResponse.errorHandler2(context, "Failed to insert into watchlist");
-      })
-      .onSuccess(result -> {
-        LOG.info("Database insert asset into watchlist completed");
-        context.response()
-          .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
-          .end();
-      });
+//    SqlTemplate.forUpdate(db,
+//      "INSERT INTO broker.watchlist VALUES (#{account_id}, #{asset})"
+//       + " ON CONFLICT (account_id, asset) DO NOTHING")
+//      .executeBatch(parameterBatch)
+//      .onFailure(error -> {
+//        LOG.error("Database insert asset into watchlist failed :", error);
+//        DBResponse.errorHandler2(context, "Failed to insert into watchlist");
+//      })
+//      .onSuccess(result -> {
+//        LOG.info("Database insert asset into watchlist completed");
+//        context.response()
+//          .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
+//          .end();
+//      });
 
     // inserting one by one is very inefficient
 //    watchList.getAssets().forEach(asset -> {

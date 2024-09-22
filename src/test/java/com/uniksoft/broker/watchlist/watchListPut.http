@@ -4,9 +4,6 @@ Content-Type: application/json
 {
   "assets": [
     {
-      "name": "AMZN"
-    },
-    {
       "name": "MSFT"
     },
     {
