@@ -49,6 +49,9 @@
     <Logger name="com.uniksoft.broker.watchlist.PutWatchListDatabaseHandler" level="info" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
+    <Logger name="com.uniksoft.broker.watchlist.DeleteWatchListDatabaseHandler" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
 
     <Root level="error">
       <AppenderRef ref="Console"/>
